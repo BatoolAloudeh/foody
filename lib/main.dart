@@ -46,7 +46,7 @@ class MyApp extends StatelessWidget {
       ),
       themeMode: ThemeMode.dark,
       debugShowCheckedModeBanner: false,
-      home: Login(),
+      home: WaiterOrdersScreen(),
     );
   }
 }

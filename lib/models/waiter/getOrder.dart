@@ -34,6 +34,7 @@ class Data {
   int? status;
   bool ? isDelivered;
 
+
   Data({this.orderId, this.tableName, this.estimatedTime, this.status,this.isDelivered = false,});
 
   Data.fromJson(Map<String, dynamic> json) {

@@ -11,15 +11,27 @@ class GetOrderWaiterCubit extends Cubit<GetOrderWaiterStates> {
   static GetOrderWaiterCubit get(context) => BlocProvider.of(context);
   late GetOrderWaiterModel getOrderWaiterModel;
 
-  void getOrders() {
-    emit(GetOrderWaiterLoadingState());
-    DioHelper.getData(url: GETORDERWAITER).then((value) {
-      getOrderWaiterModel = GetOrderWaiterModel.fromJson(value.data);
-      emit(GetOrderWaiterSuccessState(getOrderWaiterModel));
-    }).catchError((error) {
-      print("Error: ${error.toString()}");
-      emit(GetOrderWaiterErrorState(error.toString()));
-      print("Error: ${error.toString()}");
-    });
+//   void getOrders() {
+//     emit(GetOrderWaiterLoadingState());
+//     DioHelper.getData(url: GETORDERWAITER).then((value) {
+//       getOrderWaiterModel = GetOrderWaiterModel.fromJson(value.data);
+//       emit(GetOrderWaiterSuccessState(getOrderWaiterModel));
+//     }).catchError((error) {
+//       print("Error: ${error.toString()}");
+//       emit(GetOrderWaiterErrorState(error.toString()));
+//       print("Error: ${error.toString()}");
+//     });
+//   }
+// }
+Future<void> getOrders() async {
+  emit(GetOrderWaiterLoadingState());
+  try {
+    final value = await DioHelper.getData(url: GETORDERWAITER);
+    getOrderWaiterModel = GetOrderWaiterModel.fromJson(value.data);
+    emit(GetOrderWaiterSuccessState(getOrderWaiterModel));
+  } catch (error) {
+    print("Error: ${error.toString()}");
+    emit(GetOrderWaiterErrorState(error.toString()));
   }
+}
 }

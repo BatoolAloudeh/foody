@@ -1,4 +1,3 @@
-
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -17,6 +16,7 @@ class ChefOrdersScreen extends StatefulWidget {
 class _ChefOrdersScreenState extends State<ChefOrdersScreen> {
   List<Data> orders = [];
   Map<int, Timer> timers = {}; // Map to track timers for each order
+  bool _isRefreshing = false;
 
   @override
   void initState() {
@@ -116,6 +116,16 @@ class _ChefOrdersScreenState extends State<ChefOrdersScreen> {
     }
   }
 
+  Future<void> _refreshOrders() async {
+    setState(() {
+      _isRefreshing = true;
+    });
+    await BlocProvider.of<GetOrderChefCubit>(context).getOrders();
+    setState(() {
+      _isRefreshing = false;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<GetOrderChefCubit, GetOrderChefStates>(
@@ -130,13 +140,12 @@ class _ChefOrdersScreenState extends State<ChefOrdersScreen> {
         }
       },
       builder: (context, state) {
-        if (state is GetOrderChefLoadingState) {
-          return Center(child: CircularProgressIndicator());
-        } else if (state is GetOrderChefErrorState) {
-          return Center(child: Text('Error: ${state.error}'));
-        } else {
-          return Scaffold(
-            body: defaultContainerAppbar(
+        return Scaffold(
+          body: RefreshIndicator(
+            backgroundColor: greenColor1,
+            onRefresh: _refreshOrders,
+            color: whiteColor,
+            child: defaultContainerAppbar(
               child: ListView.builder(
                 itemCount: orders.length,
                 itemBuilder: (context, index) {
@@ -300,11 +309,10 @@ class _ChefOrdersScreenState extends State<ChefOrdersScreen> {
                 },
               ),
             ),
-          );
-        }
+          ),
+        );
       },
     );
   }
 }
-
 
