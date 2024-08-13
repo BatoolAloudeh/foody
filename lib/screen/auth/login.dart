@@ -1,4 +1,3 @@
-import 'dart:ui';
 
 import 'package:app1/Bloc/cubit/auth/login.dart';
 import 'package:app1/Bloc/states/auth/login.dart';
@@ -16,8 +15,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../../constant/ui/language.dart';
 
 class Login extends StatefulWidget {
-
-
   @override
   State<StatefulWidget> createState() {
     return LoginState();
@@ -30,14 +27,15 @@ class LoginState extends State<Login> {
   var formKey = GlobalKey<FormState>();
   bool password = true;
 
-  Language _language= Language();
-  List<String> _languages=['Arabic','English'];
-  String ? selectedLlanguage;
+  Language _language = Language();
+  List<String> _languages = ['Arabic', 'English'];
+  String? selectedLlanguage;
 
   void initState() {
     super.initState();
     _initLanguage();
   }
+
   void _initLanguage() async {
     SharedPreferences pref = await SharedPreferences.getInstance();
     String? savedLanguage = pref.getString('language');
@@ -49,191 +47,150 @@ class LoginState extends State<Login> {
       });
     }
   }
+
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (BuildContext context) => LoginCubit(),
-      child: BlocConsumer<LoginCubit, LoginStates>(listener: (context, state) {
-        if (state is LoginSuccessState) {
-          if (state.loginModel.accessToken != null) {
-            CacheHelper.saveData(
-                key: TOKENKEY, value: state.loginModel.accessToken)
-                .then((value) {});
-            print('success');
-            if (state.loginModel.user?.userType == 1) {
-            navigateTo(context, WaiterOrdersScreen());
-          }else{
-              navigateTo(context, ChefOrdersScreen());
+      child: BlocConsumer<LoginCubit, LoginStates>(
+        listener: (context, state) {
+          if (state is LoginSuccessState) {
+            if (state.loginModel.accessToken != null) {
+              CacheHelper.saveData(
+                key: TOKENKEY,
+                value: state.loginModel.accessToken,
+              ).then((value) {});
+              print('success');
+              if (state.loginModel.user?.userType == 1) {
+                navigateTo(context, WaiterOrdersScreen());
+              } else {
+                navigateTo(context, ChefOrdersScreen());
+              }
             }
-            }
-
-        }
-        if (state is LoginErrorState) {
-          print('error');
-        }
-      }, builder: (context, state) {
-        return Scaffold(
-          // backgroundColor: Color(0xFFE9f5DB).withOpacity(0.3),
-            body:
-            defaultContainerAppbar(
-              child:
-
-            Form(
-              key: formKey,
-              child: Center(
-                child: SingleChildScrollView(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 35),
-                        child: Text(
-                          _language.WelcomeBack(),
-                          style: TextStyle(
+          }
+          if (state is LoginErrorState) {
+            print('error');
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text(state.error)),
+            );
+          }
+        },
+        builder: (context, state) {
+          return Scaffold(
+            // backgroundColor: Color(0xFFE9f5DB).withOpacity(0.3),
+            body: defaultContainerAppbar(
+              child: Form(
+                key: formKey,
+                child: Center(
+                  child: SingleChildScrollView(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 35),
+                          child: Text(
+                            _language.WelcomeBack(),
+                            style: TextStyle(
                               fontSize: 27,
                               fontWeight: FontWeight.bold,
                               fontFamily: 'Satisfy-Regular',
-                              color: greenColor2),
-                        ),
-                        // ),
-                      ),
-                      Padding(
-                        padding: EdgeInsetsDirectional.only(start: 35),
-                        child: Text(
-                          _language.explore(),
-                          style: TextStyle(
-                            color: greenColor1,
+                              color: greenColor2,
+                            ),
                           ),
                         ),
-                      ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 25),
-                        child: defaultFormField(
-                          keyboardtype: TextInputType.emailAddress,
-                          text: _language.email(),
-                          prefix: Icons.email,
-                          controller: emailController,
-                          validate: (value) {
-                            if (value == null || value.isEmpty) {
-                              return _language.Noemail();
-                            }
-                            return null;
-                          },
-                          onChanged: (value) {
-                            print(value);
-                          },
-                          onTap: () {},
+                        Padding(
+                          padding: EdgeInsetsDirectional.only(start: 35),
+                          child: Text(
+                            _language.explore(),
+                            style: TextStyle(
+                              color: greenColor1,
+                            ),
+                          ),
                         ),
-                      ),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 25),
-                        child: defaultFormField(
-                          keyboardtype: TextInputType.visiblePassword,
-                          text: _language.password(),
-                          prefix: Icons.lock,
-                          controller: passwordController,
-                          validate: (value) {
-                            if (value!.isEmpty)
-                              return _language.Nopassword();
-                            return null;
-                          },
-                          isPassword: password,
-                          suffix: password
-                              ? Icons.visibility_off
-                              : Icons.visibility,
-                          suffixButton: () {
-                            setState(() {
-                              password = !password;
-                            });
-                          },
-                          onChanged: (value) {},
-                          onTap: () {},
+                        SizedBox(height: 15),
+                        Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 25),
+                          child: defaultFormField(
+                            keyboardtype: TextInputType.emailAddress,
+                            text: _language.email(),
+                            prefix: Icons.email,
+                            controller: emailController,
+                            validate: (value) {
+                              if (value == null || value.isEmpty) {
+                                return _language.Noemail();
+                              } else if (!RegExp(
+                                  r'^[a-zA-Z0-9._%-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$')
+                                  .hasMatch(value)) {
+                                return 'Invalid email format';
+                              }
+                              return null;
+                            },
+                            onChanged: (value) {
+                              print(value);
+                            },
+                            onTap: () {},
+                          ),
                         ),
-                      ),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 25),
-                        child:
-                        state is! LoginLoadingState
-                            ?
-                        defaultButton(
+                        const SizedBox(height: 15),
+                        Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 25),
+                          child: defaultFormField(
+                            keyboardtype: TextInputType.visiblePassword,
+                            text: _language.password(),
+                            prefix: Icons.lock,
+                            controller: passwordController,
+                            validate: (value) {
+                              if (value == null || value.isEmpty) {
+                                return _language.Nopassword();
+                              } else if (value.length < 6) {
+                                return 'Password must be at least 6 characters';
+                              }
+                              return null;
+                            },
+                            isPassword: password,
+                            suffix: password ? Icons.visibility_off : Icons.visibility,
+                            suffixButton: () {
+                              setState(() {
+                                password = !password;
+                              });
+                            },
+                            onChanged: (value) {},
+                            onTap: () {},
+                          ),
+                        ),
+                        const SizedBox(height: 15),
+                        Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 25),
+                          child: state is! LoginLoadingState
+                              ? defaultButton(
                             sizewidth: 120,
                             text: _language.Login(),
                             suffix: Icons.navigate_next,
                             onPressed: () {
                               if (formKey.currentState!.validate()) {
                                 LoginCubit.get(context).login(
-                                    email: emailController.text, password: passwordController.text);
+                                  email: emailController.text,
+                                  password: passwordController.text,
+                                );
                               }
-                            })
-                            : Center(child: CircularProgressIndicator(color: greenColor1,)),
-              ),
-                      // SizedBox(
-                      //   height: 5,
-                      // ),
-                      // Row(
-                      //     mainAxisAlignment: MainAxisAlignment.center,
-                      //     children: [
-                      //       Text(
-                      //         _language.Forget(),
-                      //         style: TextStyle(
-                      //             color: brownColor2),
-                      //       ),
-                      //       TextButton(
-                      //         onPressed: () {
-                      //           // navigateTo(context, ForgotPassword());
-                      //         },
-                      //         child: Text(
-                      //           _language.help(),
-                      //           style: TextStyle(
-                      //               color:
-                      //               whiteColor),
-                      //         ),
-                      //       )
-                      //     ]),
-                      //
-                      //
-                      //    SizedBox(height: 20,),
-                      // Container(height: 1,width: double.infinity,color: brownColor1,),
-                      //
-                      // Row(
-                      //     mainAxisAlignment: MainAxisAlignment.center,
-                      //     children: [
-                      //       Text(
-                      //         _language.NoAccount(),
-                      //         style: TextStyle(
-                      //             color: brownColor2),
-                      //       ),
-                      //       TextButton(
-                      //         onPressed: () {
-                      //           // navigateTo(context, Signup());
-                      //         },
-                      //         child: Text(
-                      //           _language.Signup(),
-                      //           style: TextStyle(
-                      //               color:
-                      //               whiteColor),
-                      //         ),
-                      //       )
-                      //     ]),
-                    ],
+                            },
+                          )
+                              : Center(
+                            child: CircularProgressIndicator(
+                              color: greenColor1,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),
             ),
-
-    ),
-        );
-      }),
+          );
+        },
+      ),
     );
   }
 }

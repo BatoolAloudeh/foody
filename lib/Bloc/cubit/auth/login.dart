@@ -29,6 +29,7 @@ class LoginCubit extends Cubit<LoginStates> {
         'device_key': deviceKey,
       },
     ).then((value) async {
+      print('deviceKey= ${deviceKey}');
       print(value.data);
       loginModel = LoginModel.fromJson(value.data);
       emit(LoginSuccessState(loginModel));

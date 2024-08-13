@@ -124,7 +124,7 @@ class _WaiterOrdersScreenState extends State<WaiterOrdersScreen> {
                             ),
                             trailing: ElevatedButton(
                               style: ElevatedButton.styleFrom(
-                                primary: order.isDelivered
+                                backgroundColor: order.isDelivered
                                     ? Colors.grey
                                     : greenColor1,
                               ),

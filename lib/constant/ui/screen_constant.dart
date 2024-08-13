@@ -1,4 +1,10 @@
+
+
+
+
+
 import 'dart:ui';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -18,55 +24,64 @@ Widget defaultFormField({
   void Function(String)? onsubmitted,
   void Function(String?)? onSaved,
   double width = double.infinity,
-  double height = 45,
+  double height = 65,
 }) =>
-    Container(
-      height: height,
-      width: width,
-      child: TextFormField(
-        onSaved:onSaved ,
-        initialValue:initialValue ,
-        cursorColor: greenColor2,
-        keyboardType: keyboardtype,
-        onChanged: onChanged,
-        onTap: onTap,
-        onFieldSubmitted: onsubmitted,
-        decoration: InputDecoration(
-          labelText: text,
-          labelStyle: TextStyle(color: greenColor1),
-          focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(100.0),
-              borderSide: BorderSide(color: whiteColor)),
-          enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(100.0),
-              borderSide: BorderSide(color: whiteColor)),
-          errorBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(100.0),
-              borderSide: BorderSide(color: whiteColor)),
-          border: const OutlineInputBorder(),
-          prefixIcon: Icon(
-            prefix,
-            color: greenColor2,
+
+Container(
+  height: height,
+  width: width,
+  child: Column(
+    children: [
+      Expanded(
+        child: TextFormField(
+          onSaved: onSaved,
+          initialValue: initialValue,
+          cursorColor: greenColor2,
+          keyboardType: keyboardtype,
+          onChanged: onChanged,
+          onTap: onTap,
+          onFieldSubmitted: onsubmitted,
+          decoration: InputDecoration(
+            labelText: text,
+            labelStyle: TextStyle(color: greenColor1),
+            focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(100.0),
+                borderSide: BorderSide(color: whiteColor)),
+            enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(100.0),
+                borderSide: BorderSide(color: whiteColor)),
+            errorBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(100.0),
+                borderSide: BorderSide(color: whiteColor)),
+            border: const OutlineInputBorder(),
+            prefixIcon: Icon(
+              prefix,
+              color: greenColor2,
+            ),
+            suffixIcon: suffix != null
+                ? IconButton(
+              onPressed: () {
+                suffixButton!();
+              },
+              icon: Icon(
+                suffix,
+                color: greenColor2,
+              ),
+              highlightColor: GWColor,
+              hoverColor: GWColor,
+            )
+                : null,
           ),
-          suffixIcon: suffix != null
-              ? IconButton(
-                  onPressed: () {
-                    suffixButton!();
-                  },
-                  icon: Icon(
-                    suffix,
-                    color: greenColor2,
-                  ),
-                  highlightColor: GWColor,
-                  hoverColor: GWColor,
-                )
-              : null,
+          controller: controller,
+          validator: validate,
+          obscureText: isPassword,
         ),
-        controller: controller,
-        validator: validate,
-        obscureText: isPassword,
       ),
-    );
+
+    ],
+  ),
+);
+
 
 Widget defaultButton({
   required String text,
@@ -77,7 +92,7 @@ Widget defaultButton({
   double width = double.infinity,
   double sizewidth = 40,
   double radius = 100.0,
-  double height = 45,
+  double height = 50,
   IconData? suffix,
 }) =>
     Container(

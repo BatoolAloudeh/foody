@@ -277,7 +277,7 @@ class _ChefOrdersScreenState extends State<ChefOrdersScreen> {
                             children: [
                               ElevatedButton(
                                 style: ElevatedButton.styleFrom(
-                                  primary: order.isCompleted! ? Colors.grey : greenColor1,
+                                  backgroundColor: order.isCompleted! ? Colors.grey : greenColor1,
                                   padding: EdgeInsets.symmetric(horizontal: 16, vertical: 10),
                                   textStyle: TextStyle(
                                     fontSize: 16,
