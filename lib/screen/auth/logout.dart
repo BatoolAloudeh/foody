@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:app1/constant/ui/screen_constant.dart';
 import 'package:shared_preferences/shared_preferences.dart';import '../../constant/constantKey/key.dart';
@@ -39,11 +40,14 @@ class LogoutState extends State<Logout> {
 
   void _logout() async {
     await CacheHelper.deleteData(key: TOKENKEY);
+    print('TOKENKEY=$TOKENKEY');
     Navigator.pushAndRemoveUntil(
       context,
       MaterialPageRoute(builder: (context) => Login()),
           (Route<dynamic> route) => false,
+
     );
+
   }
 
   @override
@@ -75,6 +79,7 @@ class LogoutState extends State<Logout> {
                     suffix: Icons.logout,
                     onPressed: _logout,
                   ),
+
                 ],
               ),
             ),

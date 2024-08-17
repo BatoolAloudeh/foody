@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:app1/screen/auth/logout.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:app1/Bloc/cubit/chef/getOrder.dart';
@@ -141,12 +142,54 @@ class _ChefOrdersScreenState extends State<ChefOrdersScreen> {
       },
       builder: (context, state) {
         return Scaffold(
+          appBar: AppBar(
+            automaticallyImplyLeading: false,
+            backgroundColor: Colors.transparent,
+            elevation: 0,
+            flexibleSpace: defaultContainerAppbar(),
+            title: Text(
+              'Orders',
+              style: TextStyle(color: greenColor1, fontSize: 24,
+                fontWeight: FontWeight.bold,),
+            ),
+            centerTitle: true,
+            actions: [
+              PopupMenuButton<String>(
+                color: greenColor1,
+                icon: Icon(Icons.menu,color: greenColor1,),
+                onSelected: (String result) {
+                  if (result == 'logout') {
+                    navigateTo(context, Logout());
+                  }
+                },
+                itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
+                  const PopupMenuItem<String>(
+                    value: 'logout',
+                    child: Text('Logout',style: TextStyle(color: Colors.white),),
+                  ),
+                ],
+              ),
+            ],
+          ),
           body: RefreshIndicator(
             backgroundColor: greenColor1,
             onRefresh: _refreshOrders,
             color: whiteColor,
             child: defaultContainerAppbar(
-              child: ListView.builder(
+              child: state is GetOrderChefLoadingState
+                  ? Center(
+                child: CircularProgressIndicator(
+                  color: greenColor2,
+                ),
+              )
+                  : state is GetOrderChefSuccessState && orders.isEmpty
+                  ? Center(
+                child: Text(
+                  "Don't have any orders yet!",
+                  style: TextStyle(fontSize: 20, color: greenColor1),
+                ),
+              )
+                  : ListView.builder(
                 itemCount: orders.length,
                 itemBuilder: (context, index) {
                   final order = orders[index];
@@ -315,4 +358,3 @@ class _ChefOrdersScreenState extends State<ChefOrdersScreen> {
     );
   }
 }
-
