@@ -87,7 +87,7 @@ class LoginCubit extends Cubit<LoginStates> {
       data: {
         'email': email,
         'password': password,
-        'device_token': deviceKey,
+        'deviceKey': deviceKey,
       },
     ).then((value) async {
       print('deviceKey= $deviceKey');

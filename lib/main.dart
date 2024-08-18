@@ -19,34 +19,12 @@ import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
-//this:
+
 String language='english';
 
 
-
-
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      theme: ThemeData(
-          textSelectionTheme: TextSelectionThemeData(
-            cursorColor: greenColor1,
-            selectionColor:whiteColor,
-            selectionHandleColor: greenColor1,
-          ),
-        scaffoldBackgroundColor: Colors.brown.shade50,
-        appBarTheme: AppBarTheme(),
-      ),
-      themeMode: ThemeMode.dark,
-      debugShowCheckedModeBanner: false,
-      home: Login(),
-    );
-  }
-}
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -76,4 +54,24 @@ void main() async {
   );
 }
 
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
 
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      theme: ThemeData(
+        textSelectionTheme: TextSelectionThemeData(
+          cursorColor: greenColor1,
+          selectionColor: whiteColor,
+          selectionHandleColor: greenColor1,
+        ),
+        scaffoldBackgroundColor: Colors.brown.shade50,
+        appBarTheme: AppBarTheme(),
+      ),
+      themeMode: ThemeMode.dark,
+      debugShowCheckedModeBanner: false,
+      home: BoardingScreen(),
+    );
+  }
+}
